@@ -1,54 +1,56 @@
 const express = require('express');
-const router = express.Router();
-const sql = require('mssql');
+const router = express.Router(); // Opretter en router til håndtering af ruteanmodninger
+const sql = require('mssql'); // Importerer MSSQL-modul til databaseinteraktion
 
+// Opret en ny post-rute for daglig ernæring
 router.post('/api/daily-nutri', (req, res) => {
-    const { userId, time, energyIntake, waterIntake, caloriesBurned, calorieBalance } = req.body;
+    const { userId, time, energyIntake, waterIntake, caloriesBurned, calorieBalance } = req.body; // Udpakker data fra anmodningen
     const query = `
         INSERT INTO [dbo].[DailyNutri] (UserID, Time, Energyintake, Waterintake, Caloriesburned, Caloriebalance)
         VALUES (${userId}, '${time}', ${energyIntake}, ${waterIntake}, ${caloriesBurned}, ${calorieBalance})
-    `;
+    `; // SQL-forespørgsel til at indsætte daglig ernæringsdata i databasen
     sql.query(query)
-        .then(result => res.json({ message: 'Daily nutrition record created successfully' }))
-        .catch(err => res.status(500).json({ error: err.message }));
+        .then(result => res.json({ message: 'Daily nutrition record created successfully' })) // Sender succesmeddelelse til klienten
+        .catch(err => res.status(500).json({ error: err.message })); // Sender fejlmeddelelse til klienten ved fejl
 });
 
-// Read Daily Nutrition Records
+// Læs alle daglige ernæringsposter
 router.get('/api/daily-nutri/:userId', (req, res) => {
-    const userId = req.params.userId;
-    const query = `SELECT * FROM [dbo].[DailyNutri] WHERE UserID = ${userId}`;
+    const userId = req.params.userId; // Henter bruger-ID fra anmodningen
+    const query = `SELECT * FROM [dbo].[DailyNutri] WHERE UserID = ${userId}`; // SQL-forespørgsel til at hente daglig ernæringsdata baseret på bruger-ID
     sql.query(query)
-        .then(result => res.json(result.recordset))
-        .catch(err => res.status(500).json({ error: err.message }));
+        .then(result => res.json(result.recordset)) // Sender daglig ernæringsdata til klienten
+        .catch(err => res.status(500).json({ error: err.message })); // Sender fejlmeddelelse til klienten ved fejl
 });
 
-// Update Daily Nutrition Record
+// Opdater en daglig ernæringspost
 router.put('/api/daily-nutri/:recordId', (req, res) => {
-    const recordId = req.params.recordId;
-    const { time, energyIntake, waterIntake, caloriesBurned, calorieBalance } = req.body;
+    const recordId = req.params.recordId; // Henter post-ID fra anmodningen
+    const { time, energyIntake, waterIntake, caloriesBurned, calorieBalance } = req.body; // Udpakker data fra anmodningen
     const query = `
         UPDATE [dbo].[DailyNutri]
         SET Time = '${time}', Energyintake = ${energyIntake}, Waterintake = ${waterIntake}, 
             Caloriesburned = ${caloriesBurned}, Caloriebalance = ${calorieBalance}
         WHERE RecordID = ${recordId}
-    `;
+    `; // SQL-forespørgsel til at opdatere daglig ernæringsdata i databasen
     sql.query(query)
-        .then(result => res.json({ message: 'Daily nutrition record updated successfully' }))
-        .catch(err => res.status(500).json({ error: err.message }));
+        .then(result => res.json({ message: 'Daily nutrition record updated successfully' })) // Sender succesmeddelelse til klienten
+        .catch(err => res.status(500).json({ error: err.message })); // Sender fejlmeddelelse til klienten ved fejl
 });
 
-// Delete Daily Nutrition Record
+// Slet en daglig ernæringspost
 router.delete('/api/daily-nutri/:recordId', (req, res) => {
-    const recordId = req.params.recordId;
-    const query = `DELETE FROM [dbo].[DailyNutri] WHERE RecordID = ${recordId}`;
+    const recordId = req.params.recordId; // Henter post-ID fra anmodningen
+    const query = `DELETE FROM [dbo].[DailyNutri] WHERE RecordID = ${recordId}`; // SQL-forespørgsel til at slette daglig ernæringspost baseret på post-ID
     sql.query(query)
-        .then(result => res.json({ message: 'Daily nutrition record deleted successfully' }))
-        .catch(err => res.status(500).json({ error: err.message }));
+        .then(result => res.json({ message: 'Daily nutrition record deleted successfully' })) // Sender succesmeddelelse til klienten
+        .catch(err => res.status(500).json({ error: err.message })); // Sender fejlmeddelelse til klienten ved fejl
 });
-// Example endpoint to retrieve daily nutri data
+
+// Eksempel slutpunkt til at hente daglig ernæringsdata
 router.get("/api/daily-nutri-calories-daywise/:userID", async (req, res) => {
     try {
-        const userID = req.params.userID;
+        const userID = req.params.userID; // Henter bruger-ID fra anmodningen
 
         const mealQuery = `
           SELECT *
@@ -89,29 +91,30 @@ router.get("/api/daily-nutri-calories-daywise/:userID", async (req, res) => {
         const request = new sql.Request();
         request.input("UserID", sql.Int, userID);
 
-        // Execute both queries concurrently
+        // Udfør alle forespørgsler samtidigt
         const [mealResult, activityResult, ingredientResult] = await Promise.all([
             request.query(mealQuery),
             request.query(activityQuery),
             request.query(ingredientQuery),
         ]);
 
-        // Combine the results
+        // Kombiner resultaterne
         const combinedResult = {
             meals: mealResult.recordset,
             activities: activityResult.recordset,
             ingredients: ingredientResult.recordset,
         };
 
-        res.status(200).json(combinedResult);
+        res.status(200).json(combinedResult); // Sender kombinerede resultater til klienten
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).send(error.message); // Sender fejlmeddelelse til klienten ved fejl
     }
 });
-// Example endpoint to retrieve daily nutri data
+
+// Eksempel slutpunkt til at hente daglig ernæringsdata
 router.get("/api/daily-nutri-calories/:userID", async (req, res) => {
     try {
-        const userID = req.params.userID;
+        const userID = req.params.userID; // Henter bruger-ID fra anmodningen
 
         const mealQuery = `
           SELECT *,
@@ -140,23 +143,24 @@ router.get("/api/daily-nutri-calories/:userID", async (req, res) => {
         const request = new sql.Request();
         request.input("UserID", sql.Int, userID);
 
-        // Execute all queries concurrently
+        // Udfør alle forespørgsler samtidigt
         const [mealResult, activityResult, ingredientResult] = await Promise.all([
             request.query(mealQuery),
             request.query(activityQuery),
-            request.query(ingredientQuery), // Corrected from IngredientQuery to ingredientQuery
+            request.query(ingredientQuery), // Rettede fra IngredientQuery til ingredientQuery
         ]);
 
-        // Combine the results
+        // Kombiner resultaterne
         const combinedResult = {
-            meals: mealResult.recordset, // Corrected from mealsa to meals
+            meals: mealResult.recordset, // Rettede fra mealsa til meals
             activities: activityResult.recordset,
-            ingredients: ingredientResult.recordset, // Corrected from ingredi to ingredients
+            ingredients: ingredientResult.recordset, // Rettede fra ingredi til ingredients
         };
 
-        res.status(200).json(combinedResult);
+        res.status(200).json(combinedResult); // Sender kombinerede resultater til klienten
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).send(error.message); // Sender fejlmeddelelse til klienten ved fejl
     }
 });
-module.exports = router
+
+module.exports = router; // Eksporterer routerobjektet til brug i andre filer
