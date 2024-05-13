@@ -1,15 +1,17 @@
 document.addEventListener("DOMContentLoaded", (e) => {
   // Hent data over Måltider
   //JSON.parse(localStorage.getItem('trackedMeals'));
+   // Når dokumentet er indlæst, sættes standardvisningen til 'daily'
   var currentView = "daily"; // Initially set to 'daily' view
   async function getMealAndDrinkTable(view) {
     const container = document.getElementById("nutrition-report-container");
     container.innerHTML = "";
 
     try {
-      // Replace ${userId} with the actual user ID
+      // Henter brugerens ID fra lokal lagring
       const userId = localStorage.getItem("loggedInUserId");
       let url = `http://localhost:3000/api/daily-nutri-calories/${userId}`;
+      // Skifter API-kald baseret på valgt visning
       if (view == "thirtyDays") {
         url = `http://localhost:3000/api/daily-nutri-calories-daywise/${userId}`;
       }
@@ -30,12 +32,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
       const data = await response.json();
       console.log(data);
       let brmData = await bmrResponse.json();
-
+      
+      // Omregner BMR til den relevante værdi, hvis den er tilgængelig
       let bmrCalculatedValue = brmData[0].BmrValue
         ? (brmData[0].BmrValue * 238.84).toFixed(2)
         : 0;
 
       mealRecords = data;
+           // Vælger funktionalitet baseret på om det er daglig eller månedlig visning
       if (view == "thirtyDays") {
         container.appendChild(
           generateMealAndDrinkTableMonth(
@@ -61,27 +65,28 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
     // Your existing code...
   }
-
+  // Funktion til at generere tabel for månedsoversigt
   function generateMealAndDrinkTableMonth(
     mealRecords,
     activityRecords,
     ingredientsRecords,
     bmrCalculatedValue
   ) {
+   // Beregn dato 30 dage tilbage
     const currentDate = new Date();
     const thirtyDaysAgo = new Date(
       currentDate.getTime() - 30 * 24 * 60 * 60 * 1000
-    ); // 30 days ago
+    ); 
 
-    // Create an object to store day-wise totals
+    
     const dayTotals = {};
-
-    // Initialize day-wise totals for the last 30 days
+    // Initialiser daglige totaler
     for (let i = 0; i < 30; i++) {
       const date = new Date(thirtyDaysAgo.getTime() + i * 24 * 60 * 60 * 1000);
       const formattedDate = date.toISOString().slice(0, 10); // YYYY-MM-DD format
       dayTotals[formattedDate] = { water: 0, calories: 0, caloriesBurned: 0 };
     }
+    // Tilføj data fra måltider, aktiviteter og ingredienser
     mealRecords.filter((rec) => {
       rec.nutrients = JSON.parse(rec.Nutrients);
       rec.drinkDate = new Date(rec.Date)
@@ -153,10 +158,10 @@ document.addEventListener("DOMContentLoaded", (e) => {
       );
     });
 
-    // Create table
+
     const table = document.createElement("table");
 
-    // Create table header
+    // Generer tabelrækker og celler
     const headerRow = table.insertRow();
     const headerCellDay = headerRow.insertCell(0);
     const headerCellWater = headerRow.insertCell(1);
@@ -186,14 +191,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
     return table;
   }
-
+  // Funktion til at generere tabel for daglig visning
   function generateMealAndDrinkTableDay(
     mealRecords,
     activitRecords,
     ingredientsRecords,
     bmrCalculatedValue
   ) {
-    // Your existing code for generating the table based on meal records
     mealRecords.filter((rec) => {
       rec.date = new Date(rec.Date)
         .toISOString()
@@ -318,7 +322,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
     return table;
   }
-
+  
+  // Funktion til at skifte visning baseret på brugerinput
   function updateView(view) {
     if (view === "daily") {
       getMealAndDrinkTable(view);
@@ -327,13 +332,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
       getMealAndDrinkTable(view);
     }
   }
-
+  
+  // Event listener for dropdown menu ændringer
   document
     .getElementById("viewDropdown")
     .addEventListener("change", function() {
       currentView = this.value;
       updateView(currentView);
     });
-
+  // Initialt kald for at sætte visningen
   updateView(currentView);
 });
