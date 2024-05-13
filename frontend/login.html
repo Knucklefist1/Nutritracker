@@ -1,107 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Page</title>
-    <style>
+<!DOCTYPE html> <!-- Definerer dokumenttypen og versionen af HTML -->
+<html lang="en"> <!-- Starter HTML-dokumentet og specificerer sproget (engelsk) -->
+  <head> <!-- Indeholder metadata og styles for dokumentet -->
+    <meta charset="UTF-8" /> <!-- Angiver tegnsættet til UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Sørger for, at layoutet er responsivt og tilpasser sig enhedens skærmstørrelse -->
+    <title>Login Page</title> <!-- Sætter titlen på browserens fane til 'Login Page' -->
+    <style> <!-- Definerer interne CSS-stylingregler for elementerne på siden -->
       body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
+        margin: 0; /* Fjerner margin */
+        padding: 0; /* Fjerner padding */
+        font-family: Arial, sans-serif; /* Sætter skrifttype */
+        background-color: #f5f5f5; /* Sætter baggrundsfarve */
       }
 
       .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        display: flex; /* Anvender flexbox layout */
+        justify-content: center; /* Centrerer indholdet horisontalt */
+        align-items: center; /* Centrerer indholdet vertikalt */
+        height: 100vh; /* Sætter containerens højde til at fylde hele viewport-højden */
       }
 
       .card {
-        width: 350px;
-        padding: 20px;
-        border-radius: 10px;
-        background-color: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 350px; /* Sætter bredde */
+        padding: 20px; /* Tilføjer padding */
+        border-radius: 10px; /* Afrunder hjørner */
+        background-color: #fff; /* Hvid baggrundsfarve */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tilføjer skygge for dybdeeffekt */
       }
 
       .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 20px; /* Afstand mellem form-grupper */
       }
 
       .form-group label {
-        display: block;
-        margin-bottom: 5px;
+        display: block; /* Elementerne vises som blokke */
+        margin-bottom: 5px; /* Afstand i bunden */
       }
 
       .form-group input {
-        width: 100%;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        width: 100%; /* Bredden sættes til 100% */
+        padding: 10px; /* Tilføjer padding */
+        border: 1px solid #ccc; /* Tilføjer en kant */
+        border-radius: 5px; /* Afrunder kanter */
       }
 
       .form-group button {
-        width: 100%;
-        padding: 10px;
-        background-color: #91c789;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+        width: 100%; /* Bredden sættes til 100% */
+        padding: 10px; /* Tilføjer padding */
+        background-color: #91c789; /* Grøn baggrundsfarve */
+        color: #fff; /* Hvid tekstfarve */
+        border: none; /* Ingen kant */
+        border-radius: 5px; /* Afrunder kanter */
+        cursor: pointer; /* Cursor ændres til en hånd når musen er over */
       }
     </style>
   </head>
 
   <body>
-    <div class="container">
-      <div class="card">
-        <h2>Login</h2>
-        <form id="login-form">
+    <div class="container"> <!-- Centreret container til loginform -->
+      <div class="card"> <!-- Kort der indeholder loginformen -->
+        <h2>Login</h2> <!-- Overskrift for loginformen -->
+        <form id="login-form"> <!-- Form for brugerlogin -->
           <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required />
+            <label for="email">Email</label> <!-- Label for email input -->
+            <input type="email" id="email" name="email" required /> <!-- Input for email, krævet felt -->
           </div>
           <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required />
+            <label for="password">Password</label> <!-- Label for password input -->
+            <input type="password" id="password" name="password" required /> <!-- Input for password, krævet felt -->
           </div>
           <div class="form-group">
-            <button type="submit">Login</button>
+            <button type="submit">Login</button> <!-- Knap til at indsende loginform -->
           </div>
           <div class="form-group">
-            <p>Don't have an account? <a href="./register.html">Sign up</a></p>
+            <p>Don't have an account? <a href="./register.html">Sign up</a></p> <!-- Link til registreringsside hvis brugeren ikke har en konto -->
           </div>
         </form>
       </div>
     </div>
 
     <script>
-      const isLoggedIn = localStorage.getItem("loggedIn");
+      const isLoggedIn = localStorage.getItem("loggedIn"); // Henter loggedIn status fra localStorage
 
       if (isLoggedIn === "true") {
-        // Redirect to index.html if already logged in
+        // Omdirigerer til index.html hvis allerede logget ind
         window.location.href = "index.html";
       }
 
-      const loginForm = document.getElementById("login-form");
+      const loginForm = document.getElementById("login-form"); // Henter loginform elementet
 
       loginForm.addEventListener("submit", function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Forhindrer standard form indsendelse
 
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        const email = document.getElementById("email").value; // Henter værdien fra email inputfelt
+        const password = document.getElementById("password").value; // Henter værdien fra password inputfelt
 
-        // Create an object with the login credentials
+        // Opretter et objekt med loginoplysningerne
         const credentials = {
           email: email,
           password: password,
         };
 
-        // Make a POST request to the login endpoint
+        // Sender en POST anmodning til login endpoint med brugeroplysninger
         fetch("http://localhost:3000/api/login", {
           method: "POST",
           headers: {
@@ -111,15 +110,15 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            // Check if login was successful
+            // Tjekker om login var succesfuld
             if (data.success) {
-              // Save the logged-in user ID in local storage
+              // Gemmer den logget ind bruger ID i localStorage
               localStorage.setItem("loggedInUserId", data.userId);
               localStorage.setItem("loggedIn", "true");
-              // Redirect or do any other necessary action
+              // Omdirigerer eller udfører anden nødvendig handling
               window.location.href = "index.html";
             } else {
-              // Login failed
+              // Login mislykkedes
               alert("Invalid email or password. Please try again.");
             }
           })
