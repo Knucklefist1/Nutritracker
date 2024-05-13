@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile</title>
+
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        box-sizing: border-box;
+      }
+
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .card {
+        width: 350px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding-left: 5px;
+      }
+
+      .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .form-group button {
+        width: 100%;
+        padding: 10px;
+        background-color: #91c789;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .delete-button {
+        width: 100%;
+        padding: 10px;
+        background-color: #e74c3c !important;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="navbar-logo-container">
+        <img
+          src="images/logo.png"
+          alt="NutriTracker Logo"
+          class="navbar-logo"
+        />
+      </div>
+      <div class="navbar-links">
+        <a href="meal_creator.html">Meal Creator</a>
+        <div class="dropdown">
+          <button class="dropbtn">Tracker</button>
+          <div class="dropdown-content">
+            <a href="meal_tracker.html">Meal Tracker</a>
+            <a href="IngredientTracker.html">Ingredient Tracker</a>
+            <a href="activityTracker.html">Activity Tracker</a>
+          </div>
+        </div>
+        <a href="DailyNutri.html">Daily Nutri</a>
+        <a href="BMR.html">BMR</a>
+        <a href="#" id="logout">Logout</a>
+        <a href="#" id="update" class="active">Edit Profile</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="card">
+        <h2>Edit Profile</h2>
+        <form id="edit-profile-form" style="padding-top: 25px">
+          <div class="form-group">
+            <label for="fullname">Full Name</label>
+            <input
+              type="text"
+              id="fullname"
+              name="fullname"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <label for="weight">Weight</label>
+            <input
+              type="number"
+              id="weight"
+              name="weight"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required autocomplete="off">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <button type="submit">Save Changes</button>
+          </div>
+
+          <div class="form-group">
+            <button type="button" class="delete-button" id="delete-profile">
+              Delete Profile
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("logout").addEventListener("click", function () {
+        localStorage.setItem("loggedIn", "false");
+        localStorage.setItem("loggedInUserId", "");
+        window.location.href = "./login.html";
+      });
+    </script>
+
+    <script>
+      const isLoggedIn = localStorage.getItem("loggedIn");
+      if (isLoggedIn !== "true") {
+        window.location.href = "./login.html"; // Redirect to login page
+      }
+      // Function to fetch user details
+      function getUserDetails() {
+        const loggedInUserId = localStorage.getItem("loggedInUserId");
+
+        // Fetch user details using the backend endpoint
+        fetch(`http://localhost:3000/api/users/${loggedInUserId}`)
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Failed to fetch user details");
+            }
+          })
+          .then((userData) => {
+            // Populate the form fields with user details
+            document.getElementById("fullname").value = userData.Username || "";
+            document.getElementById("email").value = userData.Email || "";
+            document.getElementById("age").value = userData.Age || "";
+            // Set gender field based on user's sex
+            if (userData.Sex === "m") {
+              document.getElementById("gender").value = "male";
+            } else if (userData.Sex === "f") {
+              document.getElementById("gender").value = "female";
+            } else {
+              // If sex data is neither "m" nor "f", leave gender field empty
+              document.getElementById("gender").value = "";
+            }
+            document.getElementById("password").value = userData.Password || "";
+            document.getElementById("weight").value = userData.Weight || "";
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to fetch user details");
+          });
+      }
+
+      // Function to update user profile
+      function updateProfile() {
+        const loggedInUserId = localStorage.getItem("loggedInUserId");
+        const editProfileForm = document.getElementById("edit-profile-form");
+
+        // Create user object with form data
+        const updatedUser = {
+          username: editProfileForm.querySelector("#fullname").value.trim(),
+          password: editProfileForm.querySelector("#password").value.trim(),
+          email: editProfileForm.querySelector("#email").value.trim(),
+          age: editProfileForm.querySelector("#age").value.trim(),
+          sex: editProfileForm.querySelector("#gender").value,
+          weight: editProfileForm.querySelector("#weight").value.trim(),
+        };
+
+        // Send updated user information to the backend endpoint
+        fetch(`http://localhost:3000/api/users/${loggedInUserId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUser),
+        })
+          .then((response) => {
+            if (response.ok) {
+              // Redirect or perform any other necessary action
+              alert("Profile Updated");
+              window.location.href = "index.html";
+            } else {
+              throw new Error("Failed to update profile");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to update profile");
+          });
+      }
+
+      // Function to delete user profile
+      function deleteProfile() {
+        const loggedInUserId = localStorage.getItem("loggedInUserId");
+
+        // Send DELETE request to delete user profile
+        fetch(`http://localhost:3000/api/users/${loggedInUserId}`, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            if (response.ok) {
+              // Set loggedIn to false and loggedInUserId to empty string
+              localStorage.setItem("loggedIn", "false");
+              localStorage.setItem("loggedInUserId", "");
+              // Redirect to login page
+              window.location.href = "./login.html";
+            } else {
+              throw new Error("Failed to delete profile");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to delete profile");
+          });
+      }
+
+      // Fetch user details when the page loads
+      document.addEventListener("DOMContentLoaded", getUserDetails);
+
+      // Add event listener to the edit profile form
+      document
+        .getElementById("edit-profile-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          updateProfile();
+        });
+
+      // Add event listener to the delete profile button
+      document
+        .getElementById("delete-profile")
+        .addEventListener("click", deleteProfile);
+    </script>
+  </body>
+</html>
