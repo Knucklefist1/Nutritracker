@@ -1,51 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NutriTracker, Eksamen, Viggo</title>
+<!DOCTYPE html> <!-- Definerer dokumenttypen og versionen af HTML -->
+<html lang="en"> <!-- Starter HTML-dokumentet og specificerer sproget som engelsk -->
+  <head> <!-- Indeholder metadata, eksterne links til stylesheets og scripts for dokumentet -->
+    <meta charset="UTF-8" /> <!-- Angiver tegnsættet til UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Sørger for, at layoutet er responsivt og tilpasser sig enhedens skærmstørrelse -->
+    <title>NutriTracker, Eksamen, Viggo</title> <!-- Sætter titlen på browserens fane til 'NutriTracker, Eksamen, Viggo' -->
     <link
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap"
       rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    /> <!-- Importerer Nunito skrifttyper fra Google Fonts i to forskellige vægte -->
+    <link rel="stylesheet" href="styles.css" /> <!-- Linker til en ekstern CSS-fil for at style dokumentet -->
   </head>
   <body>
-    <div class="navbar">
-      <div class="navbar-logo-container">
+    <div class="navbar"> <!-- Navigation bar, der indeholder links og funktioner for brugernavigation -->
+      <div class="navbar-logo-container"> <!-- Container for websidens logo -->
         <img
           src="images/logo.png"
           alt="NutriTracker Logo"
           class="navbar-logo"
-        />
+        /> <!-- Billede af logoet med en alternativ tekst beskrivelse, der beskriver logoet for NutriTracker -->
       </div>
-      <div class="navbar-links">
-        <a href="meal_creator.html">Meal Creator</a>
-        <div class="dropdown">
-          <button class="dropbtn">Tracker</button>
-          <div class="dropdown-content">
-            <a href="meal_tracker.html">Meal Tracker</a>
-            <a href="IngredientTracker.html">Ingredient Tracker</a>
-            <a href="activityTracker.html">Activity Tracker</a>
+      <div class="navbar-links"> <!-- Container for navigation links -->
+        <a href="meal_creator.html">Meal Creator</a> <!-- Link til måltidsskaber-side -->
+        <div class="dropdown"> <!-- Dropdown menu for yderligere tracking funktioner -->
+          <button class="dropbtn">Tracker</button> <!-- Dropdown knap -->
+          <div class="dropdown-content"> <!-- Indhold i dropdown menuen -->
+            <a href="meal_tracker.html">Meal Tracker</a> <!-- Link til måltids tracker side -->
+            <a href="IngredientTracker.html">Ingredient Tracker</a> <!-- Link til ingrediens tracker side -->
+            <a href="activityTracker.html">Activity Tracker</a> <!-- Link til aktivitets tracker side -->
           </div>
         </div>
-        <a href="DailyNutri.html">Daily Nutri</a>
-        <a href="BMR.html">BMR</a>
-        <a href="#" id="logout">Logout</a>
-        <a href="#" id="update">Edit Profile</a>
+        <a href="DailyNutri.html">Daily Nutri</a> <!-- Link til daglig ernæringsside -->
+        <a href="BMR.html">BMR</a> <!-- Link til BMR (Basal Metabolic Rate) beregner side -->
+        <a href="#" id="logout">Logout</a> <!-- Link til logud funktionalitet -->
+        <a href="#" id="update">Edit Profile</a> <!-- Link til redigeringsprofil side -->
       </div>
     </div>
     <script>
-      const isLoggedIn = localStorage.getItem("loggedIn");
+      const isLoggedIn = localStorage.getItem("loggedIn"); // Henter loginstatus fra lokal lagring
       if (isLoggedIn !== "true") {
-        window.location.href = "./login.html"; // Redirect to login page
+        window.location.href = "./login.html"; // Omdirigerer til login side, hvis brugeren ikke er logget ind
       }
       document.getElementById("update").addEventListener("click", function () {
-        window.location.href = "./updateProfile.html";
+        window.location.href = "./updateProfile.html"; // Omdirigerer brugeren til opdateringsprofil siden når klikket
       });
       document.getElementById("logout").addEventListener("click", function () {
-        localStorage.setItem("loggedIn", "false");
-        window.location.href = "./login.html";
+        localStorage.setItem("loggedIn", "false"); // Sætter loggedIn status til 'false'
+        window.location.href = "./login.html"; // Omdirigerer brugeren til loginsiden efter logout
       });
     </script>
   </body>
