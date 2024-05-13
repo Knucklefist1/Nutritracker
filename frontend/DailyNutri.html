@@ -5,9 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Daily</title>
+  <!-- Indlæser Google Fonts med Nunito skrifttype -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Indlæser stilark fra ekstern fil -->
   <link rel="stylesheet" href="styles.css" />
 
+  <!-- Interne stilark med tilpasninger til dropdown menu -->
   <style>
     .custom-dropdown {
       position: relative;
@@ -75,14 +78,18 @@
 </head>
 
 <body>
+  <!-- Navigationsbar øverst på siden -->
   <div class="navbar">
     <div class="navbar-logo-container">
+      <!-- Logo billede -->
       <img src="images/logo.png" alt="NutriTracker Logo" class="navbar-logo" />
     </div>
+    <!-- Links til andre sider og funktionaliteter -->
     <div class="navbar-links">
       <a href="meal_creator.html">Meal Creator</a>
       <div class="dropdown">
         <button class="dropbtn">Tracker</button>
+        <!-- Dropdown menu for flere sporingsmuligheder -->
         <div class="dropdown-content">
           <a href="meal_tracker.html">Meal Tracker</a>
           <a href="IngredientTracker.html">Ingredient Tracker</a>
@@ -96,6 +103,7 @@
     </div>
   </div>
 
+  <!-- Dropdown menu til at vælge visning -->
   <div class="custom-dropdown">
     <select class="custom-dropdown-select" id="viewDropdown">
       <option value="daily">View: 24 Hours</option>
@@ -103,21 +111,25 @@
     </select>
   </div>
 
+  <!-- Container til ernæringsrapport -->
   <div id="nutrition-report-container" class="meal-column"></div>
 
+  <!-- Indlæser JavaScript fil -->
   <script src="DailyNutri.js"></script>
   <script>
+    // Event listeners for log ud og opdater profil funktioner
     document.getElementById("logout").addEventListener("click", function () {
       localStorage.setItem("loggedIn", "false");
-      window.location.href = "./login.html";
+      window.location.href = "./login.html"; // Omdiriger til log ind siden
     });
     document.getElementById("update").addEventListener("click", function () {
-      window.location.href = "./updateProfile.html";
+      window.location.href = "./updateProfile.html"; // Omdiriger til opdater profil siden
     });
 
+    // Tjek om brugeren er logget ind og omdiriger hvis ikke
     const isLoggedIn = localStorage.getItem("loggedIn");
     if (isLoggedIn !== "true") {
-      window.location.href = "./login.html"; // Redirect to login page
+      window.location.href = "./login.html"; // Omdiriger til log ind siden
     }
   </script>
 </body>
