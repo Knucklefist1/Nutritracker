@@ -1,3 +1,4 @@
+// Vent med at eksekvere koden, indtil DOM'en er indlæst
 document.addEventListener("DOMContentLoaded", function() {
   var IngredientTracker = [];
   const ingredientSelect = document.getElementById("ingredientSelect");
@@ -6,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function displayIngredientTrackerData() {
     intakeRecordsContainer.innerHTML = "";
-    // Replace ${userId} with the actual user ID
+    // Erstat ${userId} med den faktiske bruger-ID
     const userId = localStorage.getItem("loggedInUserId");
 
     fetch(`http://localhost:3000/api/mealIngredientTracker/${userId}`, {
@@ -18,20 +19,20 @@ document.addEventListener("DOMContentLoaded", function() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Netværksrespons var ikke okay");
         }
         return response.json();
       })
       .then((data) => {
         IngredientTracker = data;
-        console.log("displayIngredientTracker  data:", IngredientTracker);
+        console.log("displayIngredientTracker-data:", IngredientTracker);
         data.forEach((element) => {
           element.nutrients = JSON.parse(element.Nutrients);
           addIntakeRecordToDOM(element, element.MealIngredientTrackerID);
         });
       })
       .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
+        console.error("Der opstod et problem med fetch-operationen:", error);
       });
   }
 
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
       );
       console.log(selectedMealData);
       if (!selectedMealData) {
-        alert("Selected meal data not found!");
+        alert("Valgte måltedsdata ikke fundet!");
         return;
       }
       let nutrientValues = await getNutrientValues(
@@ -63,13 +64,13 @@ document.addEventListener("DOMContentLoaded", function() {
       selectedMealData.nutrientValues = nutrientValues;
       const nutrients = calculateNutrients(selectedMealData, mealWeight);
 
-      // sætter timestamp for måltid
+      // Sætter timestamp for måltid
       const [hoursOfMeal, minutesOfMeal] = mealTime.split(":");
       const currentMealDate = new Date();
       currentMealDate.setHours(parseInt(hoursOfMeal, 10));
       currentMealDate.setMinutes(parseInt(minutesOfMeal, 10));
 
-      // sætter timestamp for drink
+      // Sætter timestamp for drikke
       const [hoursOfDrink, minutesOfDrink] = drinkTime.split(":");
       const currentDrinkDate = new Date();
       currentDrinkDate.setHours(parseInt(hoursOfDrink, 10));
@@ -93,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       localStorage.setItem(trackedMealKey, JSON.stringify(mealRecord));
 
-      // Gem tracked meals i et array
+      // Gem trackede måltider i et array
       let trackedMeals = JSON.parse(localStorage.getItem("trackedMeals"));
       if (trackedMeals) {
         trackedMeals.push(mealRecord);
@@ -175,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         console.log(allIngredients.slice(0, 5));
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => console.error("Fejl ved hentning af data:", error));
   }
 
   async function addMealTracker(mealtrackerObj, type) {
@@ -193,18 +194,18 @@ document.addEventListener("DOMContentLoaded", function() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Netværksrespons var ikke okay");
         }
         return response.json();
       })
       .then((data) => {
-        console.log("back", data);
+        console.log("tilbage", data);
         trackMealForm.reset();
 
         displayIngredientTrackerData();
       })
       .catch((error) => {
-        console.error("There was a problem with adding meal:", error);
+        console.error("Der opstod et problem med at tilføje måltid:", error);
       });
   }
 
@@ -218,7 +219,8 @@ document.addEventListener("DOMContentLoaded", function() {
       ((mealData?.nutrientValues.kalorier || 0) * weight) / 100;
     totalNutrients.protein +=
       ((mealData?.nutrientValues.protein || 0) * weight) / 100;
-    totalNutrients.fat += ((mealData?.nutrientValues.fedt || 0) * weight) / 100;
+    totalNutrients.fat +=
+      ((mealData?.nutrientValues.fedt || 0) * weight) / 100;
     totalNutrients.fibre +=
       ((mealData?.nutrientValues.fibre || 0) * weight) / 100;
     return totalNutrients;
@@ -227,11 +229,14 @@ document.addEventListener("DOMContentLoaded", function() {
   function _calculateNutrients(mealData, weight) {
     console.log({ mealData });
     let totalNutrients = { kcal: 0, protein: 0, fat: 0, fibre: 0 };
-    totalNutrients.kcal += ((mealData?.nutrients.kcal || 0) * weight) / 100;
+    totalNutrients.kcal +=
+      ((mealData?.nutrients.kcal || 0) * weight) / 100;
     totalNutrients.protein +=
       ((mealData?.nutrients.protein || 0) * weight) / 100;
-    totalNutrients.fat += ((mealData?.nutrients.fat || 0) * weight) / 100;
-    totalNutrients.fibre += ((mealData?.nutrients.fibre || 0) * weight) / 100;
+    totalNutrients.fat +=
+      ((mealData?.nutrients.fat || 0) * weight) / 100;
+    totalNutrients.fibre +=
+      ((mealData?.nutrients.fibre || 0) * weight) / 100;
     return totalNutrients;
   }
 
@@ -244,9 +249,9 @@ document.addEventListener("DOMContentLoaded", function() {
     recordDiv.classList.add("record");
     recordDiv.dataset.id = recordId;
     recordDiv.innerHTML = `
-            <span>${mealRecord.Date} - ${mealRecord.Mealname} - ${mealRecord.Weight}g at ${mealRecord.Time}, ${kcalValue} kcal</span>
-            <button class="edit">Edit</button>
-            <button class="delete">Delete</button>
+            <span>${mealRecord.Date} - ${mealRecord.Mealname} - ${mealRecord.Weight}g ved ${mealRecord.Time}, ${kcalValue} kcal</span>
+            <button class="edit">Redigér</button>
+            <button class="delete">Slet</button>
         `;
 
     const deleteButton = recordDiv.querySelector(".delete");
@@ -274,14 +279,14 @@ document.addEventListener("DOMContentLoaded", function() {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Netværksrespons var ikke okay");
         }
         return response.json();
       })
       .then((data) => {})
       .catch((error) => {
         console.error(
-          "There was a problem with the deleting opertaion:",
+          "Der opstod et problem med sletningsoperationen:",
           error
         );
       });
@@ -293,19 +298,20 @@ document.addEventListener("DOMContentLoaded", function() {
     ); //JSON.parse(localStorage.getItem(recordId));
     mealRecord.nutrients = JSON.parse(mealRecord.Nutrients);
     if (!mealRecord) {
-      console.error("Meal record not found");
+      console.error("Måltidsrekord ikke fundet");
       return;
     }
 
-    // const newMealName = prompt("Edit meal name:", mealRecord.MealName);
+    // const newMealName = prompt("Redigér måltidsnavn:", mealRecord.MealName);
     const newWeight = parseFloat(
-      prompt("Edit meal weight (g):", mealRecord.Weight)
+      prompt("Redigér måltidsvægt (g):", mealRecord.Weight)
     );
-    const newTime = prompt("Edit meal time:", mealRecord.Time);
-    const newDate = prompt("Edit meal date:", mealRecord.Date);
+    const newTime = prompt("Redigér måltidstid:", mealRecord.Time);
+    const newDate = prompt("Redigér måltidsdato:", mealRecord.Date);
 
     if (!isNaN(newWeight) && newTime && newDate) {
-      // let originalMealData = JSON.parse(localStorage.getItem(newMealName)); // Antager at den originale opskrift kan hentes ved navn
+      // Lad os antage, at den oprindelige opskrift kan hentes ved navn
+      // let originalMealData = JSON.parse(localStorage.getItem(newMealName));
       // if (!originalMealData) {
       //     localStorage.setItem(`${mealRecord.MealName}`, JSON.stringify(newMealName))
       //     originalMealData = mealRecord;
@@ -323,7 +329,7 @@ document.addEventListener("DOMContentLoaded", function() {
       addMealTracker(mealRecord, "PUT");
       localStorage.setItem(recordId, JSON.stringify(mealRecord));
     } else {
-      alert("Invalid input.");
+      alert("Ugyldig input.");
     }
   }
 });
