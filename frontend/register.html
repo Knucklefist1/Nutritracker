@@ -1,81 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login & Signup Page</title>
-    <style>
+<!DOCTYPE html> <!-- Definerer dokumenttypen og HTML-versionen -->
+<html lang="en"> <!-- Starter HTML-dokumentet og specificerer sproget som engelsk -->
+  <head> <!-- Indeholder metadata, scripts og styles for dokumentet -->
+    <meta charset="UTF-8" /> <!-- Angiver karakter encoding til UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Sikrer at siden er responsiv -->
+    <title>Login & Signup Page</title> <!-- Sætter titlen i browserens titellinje -->
+    <style> <!-- Indlejret CSS til styling af siden -->
       body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
+        margin: 0; /* Fjerner margin */
+        padding: 0; /* Fjerner padding */
+        font-family: Arial, sans-serif; /* Sætter skrifttype */
+        background-color: #f5f5f5; /* Sætter baggrundsfarve */
       }
 
       .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+        display: flex; /* Anvender flexbox layout */
+        justify-content: center; /* Centrerer indholdet horisontalt */
+        align-items: center; /* Centrerer indholdet vertikalt */
+        height: 100vh; /* Sætter containerens højde til at fylde hele viewport-højden */
       }
 
       .card {
-        width: 350px;
-        padding: 20px;
-        border-radius: 10px;
-        background-color: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 350px; /* Sætter bredde */
+        padding: 20px; /* Tilføjer padding */
+        border-radius: 10px; /* Afrunder hjørner */
+        background-color: #fff; /* Hvid baggrundsfarve */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tilføjer skygge for dybdeeffekt */
       }
 
       .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 20px; /* Afstand mellem form-grupper */
       }
 
-      .form-group label {
-        display: block;
-        margin-bottom: 5px;
+      .form-group label, .form-group input, .form-group select, .form-group button, .form-group a {
+        display: block; /* Elementerne vises som blokke */
+        width: 100%; /* Bredden sættes til 100% */
+        margin-bottom: 5px; /* Afstand i bunden */
       }
 
-      .form-group input {
-        width: 100%;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-      }
-
-      .form-group select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+      .form-group input, .form-group select { /* Tilføjer yderligere styling for input og select elementer */
+        padding: 10px; /* Tilføjer padding */
+        border: 1px solid #ccc; /* Tilføjer en kant */
+        border-radius: 5px; /* Afrunder kanter */
       }
 
       .form-group button {
-        width: 100%;
-        padding: 10px;
-        background-color: #91c789;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+        padding: 10px; /* Tilføjer padding */
+        background-color: #91c789; /* Grøn baggrundsfarve */
+        color: #fff; /* Hvid tekstfarve */
+        border: none; /* Ingen kant */
+        border-radius: 5px; /* Afrunder kanter */
+        cursor: pointer; /* Cursor ændres til en hånd når musen er over */
       }
 
       .form-group a {
-        display: block;
-        margin-top: 10px;
-        text-align: center;
-        text-decoration: none;
-        color: #333;
+        margin-top: 10px; /* Topmargin */
+        text-align: center; /* Centrerer tekst */
+        text-decoration: none; /* Fjerner understregning */
+        color: #333; /* Sætter tekstfarve */
       }
     </style>
   </head>
 
-  <body>
-    <div class="container">
-      <div class="card">
-        <h2>Signup</h2>
-        <form id="signup-form">
+  <body> <!-- Indeholder det synlige indhold på websiden -->
+    <div class="container"> <!-- Centreret container til tilmeldingsform -->
+      <div class="card"> <!-- Kort der indeholder formen -->
+        <h2>Signup</h2> <!-- Overskrift for formen -->
+        <form id="signup-form"> <!-- Form for brugeroprettelse -->
+          <!-- Formgrupper for forskellige inputfelter -->
           <div class="form-group">
             <label for="fullname">Full Name</label>
             <input type="text" id="fullname" name="fullname" required />
@@ -107,7 +98,7 @@
             <button type="submit">Signup</button>
           </div>
         </form>
-        <div class="form-group">
+        <div class="form-group"> <!-- Link til login side for eksisterende brugere -->
           <a href="./login.html">Already have an account? Login here</a>
         </div>
       </div>
@@ -117,7 +108,7 @@
       const isLoggedIn = localStorage.getItem("loggedIn");
 
       if (isLoggedIn === "true") {
-        // Redirect to index.html if already logged in
+        // Omdirigerer til index.html hvis brugeren allerede er logget ind
         window.location.href = "index.html";
       }
 
@@ -126,7 +117,7 @@
       signupForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
-        // Retrieve form values
+        // Henter data fra formularfelter
         const fullName = document.getElementById("fullname").value.trim();
         const email = document.getElementById("email").value.trim();
         const age = document.getElementById("age").value.trim();
@@ -134,13 +125,13 @@
         const password = document.getElementById("password").value.trim();
         const weight = document.getElementById("weight").value.trim();
 
-        // Validate name and password fields
+        // Validering af påkrævede felter
         if (fullName === "" || password === "" || email === "") {
           alert("Please type values for Name, Email, and Password fields.");
-          return; // Stop form submission if fields are empty
+          return; // Stopper formularafsending hvis felter er tomme
         }
 
-        // Create user object
+        // Opretter brugerobjekt
         const newUser = {
           username: fullName,
           password: password,
@@ -150,7 +141,7 @@
           weight: weight,
         };
 
-        // Send POST request to backend API
+        // Sender POST-anmodning til backend API
         fetch("http://localhost:3000/api/users", {
           method: "POST",
           headers: {
@@ -160,18 +151,17 @@
         })
           .then((response) => {
             if (response.ok) {
-              // User created successfully, extract the user ID from response
+              // Bruger oprettet succesfuldt
               return response.json();
             } else {
-              // Error handling
+              // Fejlhåndtering
               alert("Failed to create user");
             }
           })
           .then((data) => {
-            // Redirect to index.html using the userId from the response
+            // Gemmer brugerID og omdirigerer
             localStorage.setItem("loggedInUserId", data.userId);
             localStorage.setItem("loggedIn", "true");
-            // Redirect to index.html
             window.location.href = "index.html";
           })
           .catch((error) => {
