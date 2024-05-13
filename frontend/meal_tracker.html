@@ -1,89 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meal Tracker</title>
+<!DOCTYPE html> <!-- Definerer dokumenttypen og versionen af HTML -->
+<html lang="en"> <!-- Starter HTML-dokumentet og specificerer sproget (engelsk) -->
+  <head> <!-- Indeholder metadata, eksterne links til stylesheets og scripts for dokumentet -->
+    <meta charset="UTF-8" /> <!-- Angiver tegnsættet til UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Sørger for, at layoutet er responsivt og tilpasser sig enhedens skærmstørrelse -->
+    <title>Meal Tracker</title> <!-- Sætter titlen på browserens fane til 'Meal Tracker' -->
     <link
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap"
       rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    /> <!-- Importerer Nunito font fra Google Fonts med to forskellige fontvægte -->
+    <link rel="stylesheet" href="styles.css" /> <!-- Linker til en ekstern CSS-fil for at style dokumentet -->
   </head>
 
-  <body>
-    <div class="navbar">
-      <div class="navbar-logo-container">
+  <body> <!-- Indeholder det synlige indhold på websiden -->
+    <div class="navbar"> <!-- Navigation bar, der indeholder links og funktioner for brugernavigation -->
+      <div class="navbar-logo-container"> <!-- Container for websidens logo -->
         <img
           src="images/logo.png"
           alt="NutriTracker Logo"
           class="navbar-logo"
-        />
+        /> <!-- Billede af logoet med en alternativ tekst beskrivelse -->
       </div>
-      <div class="navbar-links">
-        <a href="meal_creator.html">Meal Creator</a>
-        <div class="dropdown">
-          <button class="dropbtn active">Tracker</button>
-          <div class="dropdown-content">
-            <a href="meal_tracker.html" class="active">Meal Tracker</a>
-            <a href="IngredientTracker.html">Ingredient Tracker</a>
-            <a href="activityTracker.html">Activity Tracker</a>
+      <div class="navbar-links"> <!-- Container for navigation links -->
+        <a href="meal_creator.html">Meal Creator</a> <!-- Link til måltidsskaber-side -->
+        <div class="dropdown"> <!-- Dropdown menu for yderligere tracking funktioner -->
+          <button class="dropbtn active">Tracker</button> <!-- Dropdown knap markeret som aktiv -->
+          <div class="dropdown-content"> <!-- Indhold i dropdown menuen -->
+            <a href="meal_tracker.html" class="active">Meal Tracker</a> <!-- Aktivt link til måltids tracker side -->
+            <a href="IngredientTracker.html">Ingredient Tracker</a> <!-- Link til ingrediens tracker side -->
+            <a href="activityTracker.html">Activity Tracker</a> <!-- Link til aktivitets tracker side -->
           </div>
         </div>
-        <a href="DailyNutri.html">Daily Nutri</a>
-        <a href="BMR.html">BMR</a>
-        <a href="#" id="logout">Logout</a>
-        <a href="#" id="update">Edit Profile</a>
+        <a href="DailyNutri.html">Daily Nutri</a> <!-- Link til daglig ernæringsside -->
+        <a href="BMR.html">BMR</a> <!-- Link til BMR (Basal Metabolic Rate) beregner side -->
+        <a href="#" id="logout">Logout</a> <!-- Link til logud funktionalitet -->
+        <a href="#" id="update">Edit Profile</a> <!-- Link til redigeringsprofil side -->
       </div>
     </div>
 
-    <div class="tracker-container">
-      <h2>Meal Tracker</h2>
-      <form id="trackMealForm">
-        <label for="recipeSelect">Select Recipe:</label>
-        <select id="recipeSelect" name="recipe" required></select>
+    <div class="tracker-container"> <!-- Container for oprettelse og visning af måltidsdata -->
+      <h2>Meal Tracker</h2> <!-- Overskrift for siden -->
+      <form id="trackMealForm"> <!-- Formular for indtastning af måltidsdata -->
+        <label for="recipeSelect">Select Recipe:</label> <!-- Label for opskriftsvælger -->
+        <select id="recipeSelect" name="recipe" required></select> <!-- Dropdown menu for valg af opskrift -->
 
-        <label for="mealWeight">Weight of Meal (grams):</label>
-        <input type="number" id="mealWeight" name="mealWeight" required />
+        <label for="mealWeight">Weight of Meal (grams):</label> <!-- Label for måltidsvægt inputfelt -->
+        <input type="number" id="mealWeight" name="mealWeight" required /> <!-- Numerisk inputfelt for vægt -->
 
-        <label for="mealTime">Time of Meal:</label>
-        <input type="time" id="mealTime" name="mealTime" required />
+        <label for="mealTime">Time of Meal:</label> <!-- Label for måltidstidspunkt inputfelt -->
+        <input type="time" id="mealTime" name="mealTime" required /> <!-- Tidsvælger for måltidstidspunkt -->
 
-        <label for="mealDate">Date of Meal:</label>
+        <label for="mealDate">Date of Meal:</label> <!-- Label for måltidsdato inputfelt -->
         <input
           type="date"
           class="mealDate"
           id="mealDate"
           name="mealDate"
           required
-        />
+        /> <!-- Dato vælger for måltidsdato -->
 
-        <label for="drinkVolume">Volume of Drink (liters):</label>
+        <label for="drinkVolume">Volume of Drink (liters):</label> <!-- Label for drikkevolumen inputfelt -->
         <input
           type="number"
           id="drinkVolume"
           name="drinkVolume"
           step="0.1"
           required
-        />
+        /> <!-- Numerisk inputfelt for drikkevolumen med skridtstørrelse på 0.1 liter -->
 
-        <label for="drinkTime">Time of Drink:</label>
-        <input type="time" id="drinkTime" name="drinkTime" required />
+        <label for="drinkTime">Time of Drink:</label> <!-- Label for drikketidspunkt inputfelt -->
+        <input type="time" id="drinkTime" name="drinkTime" required /> <!-- Tidsvælger for drikketidspunkt -->
 
-        <button type="button" id="registerIntakeButton">Register Intake</button>
+        <button type="button" id="registerIntakeButton">Register Intake</button> <!-- Knap til registrering af indtag -->
       </form>
 
-      <div class="intake-records">
-        <h3>Your Intake Records</h3>
+      <div class="intake-records"> <!-- Container for visning af indtagningsposter -->
+        <h3>Your Intake Records</h3> <!-- Overskrift for indtagningsposter -->
       </div>
     </div>
 
-    <div id="demo"></div>
-    <!-- This is the element where the location data will be displayed -->
+    <div id="demo"></div> <!-- Element hvor lokationsdata vil blive vist -->
 
-    <script src="meal_tracker.js"></script>
+    <script src="meal_tracker.js"></script> <!-- Linker til eksternt JavaScript-fil for yderligere funktionalitet -->
     <script>
-      // Call getLocation() when the page is loaded
+      // Kalder getLocation() når siden indlæses
       document.addEventListener("DOMContentLoaded", getLocation);
 
       function getLocation() {
@@ -92,12 +91,12 @@
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(showPosition);
         } else {
-          x.innerHTML = "Geolocation is not supported by this browser.";
+          x.innerHTML = "Geolocation is not supported by this browser."; <!-- Viser fejlbesked hvis geolokation ikke understøttes -->
         }
       }
 
       document.getElementById("update").addEventListener("click", function () {
-        window.location.href = "./updateProfile.html";
+        window.location.href = "./updateProfile.html"; <!-- Omdirigerer brugeren til opdateringsprofil siden -->
       });
 
       function showPosition(position) {
@@ -106,18 +105,18 @@
           "Latitude: " +
           position.coords.latitude +
           "<br>Longitude: " +
-          position.coords.longitude;
+          position.coords.longitude; <!-- Viser brugerens bredde- og længdegrad -->
       }
     </script>
     <script>
       document.getElementById("logout").addEventListener("click", function () {
-        localStorage.setItem("loggedIn", "false");
-        window.location.href = "./login.html";
+        localStorage.setItem("loggedIn", "false"); // Sætter loggedIn status til 'false'
+        window.location.href = "./login.html"; // Omdirigerer brugeren til loginsiden
       });
 
       const isLoggedIn = localStorage.getItem("loggedIn");
       if (isLoggedIn !== "true") {
-        window.location.href = "./login.html"; // Redirect to login page
+        window.location.href = "./login.html"; // Omdirigerer til login side, hvis ikke logget ind
       }
     </script>
   </body>
