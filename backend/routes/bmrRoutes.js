@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router();
-const sql = require('mssql');
+const router = express.Router(); // Opretter en router til håndtering af ruteanmodninger
+const sql = require('mssql'); // Importerer MSSQL-modul til databaseinteraktion
 
+// Opret ny BMR-post
 router.post("/api/bmr", (req, res) => {
-    const { userID, age, weight, datetime, bmrvalue } = req.body;
+    const { userID, age, weight, datetime, bmrvalue } = req.body; // Udpakker data fra anmodningen
     const query = `INSERT INTO BMR (UserID, Age, Weight, Datetime,BmrValue)
-                     VALUES (@UserID, @Age, @Weight, @Datetime,@BmrValue);`;
+                     VALUES (@UserID, @Age, @Weight, @Datetime,@BmrValue);`; // SQL-forespørgsel til at indsætte BMR-data i databasen
     const request = new sql.Request();
     request.input("UserID", sql.Int, userID);
     request.input("Age", sql.Int, age);
@@ -13,37 +14,34 @@ router.post("/api/bmr", (req, res) => {
     request.input("Datetime", sql.DateTime, datetime);
     request.input("BmrValue", sql.VarChar(8), bmrvalue);
 
-    request.query(query, (err, result) => {
+    request.query(query, (err, result) => { // Udfører SQL-forespørgslen
         if (err) {
-            res.status(500).send(err.message);
+            res.status(500).send(err.message); // Sender fejlmeddelelse til klienten ved fejl
         } else {
-            res.json({ success: true });
+            res.json({ success: true }); // Sender succesmeddelelse til klienten
         }
     });
 });
 
-
-
-
-// READ operation - Get all BMR records
+// Læs alle BMR-poster
 router.get('/api/bmr/:userID', (req, res) => {
-    const userId = req.params.userID;
-    const query = `SELECT * FROM BMR where UserID = ${userId};`;
-    sql.query(query, (err, result) => {
+    const userId = req.params.userID; // Henter bruger-ID fra anmodningen
+    const query = `SELECT * FROM BMR where UserID = ${userId};`; // SQL-forespørgsel til at hente BMR-data baseret på bruger-ID
+    sql.query(query, (err, result) => { // Udfører SQL-forespørgslen
         if (err) {
-            res.status(500).send(err.message);
+            res.status(500).send(err.message); // Sender fejlmeddelelse til klienten ved fejl
         } else {
-            res.status(200).json(result.recordset);
+            res.status(200).json(result.recordset); // Sender BMR-data til klienten
         }
     });
 });
 
-// UPDATE operation - Update a BMR record
+// Opdater en BMR-post
 router.put('/api/bmr/:id', (req, res) => {
-    const { userID, age, weight, datetime, bmrvalue } = req.body;
-    const { id } = req.params;
+    const { userID, age, weight, datetime, bmrvalue } = req.body; // Udpakker data fra anmodningen
+    const { id } = req.params; // Henter BMR-ID fra anmodningen
     const query = `UPDATE BMR SET UserID = @UserID, Age = @Age, Weight = @Weight, Datetime = @Datetime , BmrValue = @BmrValue
-                   WHERE BMRID = @BMRID;`;
+                   WHERE BMRID = @BMRID;`; // SQL-forespørgsel til at opdatere BMR-data i databasen
     const request = new sql.Request();
     request.input('BMRID', sql.Int, id);
     request.input('UserID', sql.Int, userID);
@@ -52,34 +50,35 @@ router.put('/api/bmr/:id', (req, res) => {
     request.input('Datetime', sql.DateTime, datetime);
     request.input('BmrValue', sql.VarChar(8), bmrvalue);
 
-    request.query(query, (err, result) => {
+    request.query(query, (err, result) => { // Udfører SQL-forespørgslen
         if (err) {
-            res.status(500).json({ "message": err.message });
+            res.status(500).json({ "message": err.message }); // Sender fejlmeddelelse til klienten ved fejl
         } else {
-            res.status(200).send('BMR record updated successfully');
+            res.status(200).send('BMR record updated successfully'); // Sender succesmeddelelse til klienten
         }
     });
 });
 
-// DELETE operation - Delete a BMR record
+// Slet en BMR-post
 router.delete('/api/bmr/:id', (req, res) => {
-    const { id } = req.params;
-    const query = `DELETE FROM BMR WHERE BMRID = @BMRID;`;
+    const { id } = req.params; // Henter BMR-ID fra anmodningen
+    const query = `DELETE FROM BMR WHERE BMRID = @BMRID;`; // SQL-forespørgsel til at slette BMR-post baseret på BMR-ID
     const request = new sql.Request();
     request.input('BMRID', sql.Int, id);
 
-    request.query(query, (err, result) => {
+    request.query(query, (err, result) => { // Udfører SQL-forespørgslen
         if (err) {
-            res.status(500).send(err.message);
+            res.status(500).send(err.message); // Sender fejlmeddelelse til klienten ved fejl
         } else {
-            res.status(200).send('BMR record deleted successfully');
+            res.status(200).send('BMR record deleted successfully'); // Sender succesmeddelelse til klienten
         }
     });
 });
-// Example endpoint for calculating basal metabolic rate
+
+// Eksempel slutpunkt til beregning af basal stofskifte
 router.post('/api/basal-metabolic-rate/calculate', (req, res) => {
-    const { userId, weight, age, gender } = req.body;
-    // Insert logic to calculate basal metabolic rate
+    const { userId, weight, age, gender } = req.body; // Udpakker data fra anmodningen
+    // Indsæt logik til at beregne basal stofskifte
 });
 
-module.exports = router
+module.exports = router; // Eksporterer routerobjektet til brug i andre filer
