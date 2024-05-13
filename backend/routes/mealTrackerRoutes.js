@@ -2,14 +2,19 @@ const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
 
+// Opretter et endpoint for at tilføje data til MealTracker-tabellen
 router.post('/api/mealtracker', (req, res) => {
+    // Udpakker data fra request body
     const { userID, mealID, weight, timeOfMeal, nutrients, drinkVolume, drinkTime, time, date } = req.body;
+    // SQL-forespørgsel til at indsætte data
     const query = `
         INSERT INTO MealTracker (UserID, MealID, Weight, TimeOfMeal, Nutrients, DrinkVolume, DrinkTime, Time, Date)
         VALUES (@userID, @mealID, @weight, @timeOfMeal, @nutrients, @drinkVolume, @drinkTime, @time, @date);
     `;
 
+    // Opretter en ny SQL-forespørgsel
     const request = new sql.Request();
+    // Tilføjer parametre til SQL-forespørgslen
     request.input('UserID', sql.Int, userID);
     request.input('MealID', sql.VarChar(255), mealID);
     request.input('Weight', sql.Decimal(10, 2), weight);
@@ -20,6 +25,7 @@ router.post('/api/mealtracker', (req, res) => {
     request.input('Time', sql.VarChar(8), time);
     request.input('Date', sql.Date, date);
 
+    // Udfører SQL-forespørgslen og håndterer resultater
     request.query(query)
         .then(result => {
             res.json({ message: 'Meal Tracker record created successfully.' });
@@ -29,12 +35,12 @@ router.post('/api/mealtracker', (req, res) => {
         });
 });
 
-//Update Meal Tracker
+// Opdaterer en eksisterende Meal Tracker-post
 router.put('/api/mealtracker/:mealTrackerID', (req, res) => {
     const mealTrackerID = req.params.mealTrackerID;
     const { userID, mealID, mealName, weight, TimeOfMeal, nutrients, drinkVolume, drinkTime, time, date } = req.body;
-    console.log({ mealTrackerID }, { TimeOfMeal })
-    //to update MealTracker table
+    console.log({ mealTrackerID }, { TimeOfMeal }) // Logger til konsollen for fejlsøgning
+    // SQL-forespørgsel til at opdatere en post
     const query = `
         UPDATE MealTracker 
         SET UserID = @UserID, Weight = @Weight, TimeOfMeal = @TimeOfMeal, Nutrients = @Nutrients, 
@@ -42,10 +48,11 @@ router.put('/api/mealtracker/:mealTrackerID', (req, res) => {
         WHERE MealTrackerID = @mealTrackerID;
     `;
 
-
+    // Ny forespørgsel for SQL-operation
     const request = new sql.Request();
+    // Tilføjer parametre til SQL-forespørgslen
     request.input('UserID', sql.Int, userID);
-    // request.input('MealName', sql.VarChar(255), mealName);
+    // request.input('MealName', sql.VarChar(255), mealName); // denne linje er udkommenteret, da den ikke bruges i forespørgslen
     request.input('Weight', sql.Decimal(10, 2), weight);
     request.input('TimeOfMeal', sql.VarChar(8), TimeOfMeal);
     request.input('Nutrients', sql.NVarChar(sql.MAX), nutrients);
@@ -55,6 +62,7 @@ router.put('/api/mealtracker/:mealTrackerID', (req, res) => {
     request.input('Date', sql.Date, date);
     request.input('mealTrackerID', sql.Int, mealTrackerID);
 
+    // Udfører forespørgslen og håndterer svar
     request.query(query)
         .then(result => {
             if (result.rowsAffected[0] > 0) {
@@ -62,6 +70,7 @@ router.put('/api/mealtracker/:mealTrackerID', (req, res) => {
                 UPDATE [dbo].[Meal]
                 SET Mealname = '${mealName}' WHERE MealID = ${mealID} 
             `;
+                // Opdaterer yderligere data i en anden tabel hvis den primære opdatering lykkes
                 sql.query(query)
                     .then(result => {
                         res.status(201).send({ message: 'Meal and Meal Tracker updated successfully' })
@@ -78,8 +87,6 @@ router.put('/api/mealtracker/:mealTrackerID', (req, res) => {
             res.status(500).json({ error: error.message });
         });
 });
-
-
 
 router.get('/api/mealtracker/:userId', (req, res) => {
     const userId = req.params.userId;
