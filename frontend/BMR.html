@@ -5,19 +5,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Basal Metabolic Rate Calculator</title>
+  <!-- Indlæser Google Fonts med Nunito skrifttype -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Indlæser stilark fra ekstern fil -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
+  <!-- Navigationsbar øverst på siden -->
   <div class="navbar">
     <div class="navbar-logo-container">
+      <!-- Logo billede -->
       <img src="images/logo.png" alt="NutriTracker Logo" class="navbar-logo" />
     </div>
+    <!-- Links til andre sider og funktionaliteter -->
     <div class="navbar-links">
       <a href="meal_creator.html">Meal Creator</a>
       <div class="dropdown">
         <button class="dropbtn">Tracker</button>
+        <!-- Dropdown menu for flere sporingsmuligheder -->
         <div class="dropdown-content">
           <a href="meal_tracker.html">Meal Tracker</a>
           <a href="IngredientTracker.html">Ingredient Tracker</a>
@@ -31,6 +37,7 @@
     </div>
   </div>
 
+  <!-- Container til BMR beregneren -->
   <div class="tracker-container">
     <h2>Basal Metabolic Rate Calculator</h2>
     <form id="trackMealForm">
@@ -40,9 +47,11 @@
       <label for="weight">Weight (kg):</label>
       <input type="number" id="weight" name="weight" step="any" required />
 
+      <!-- Knap til at beregne BMR -->
       <button type="button" id="calculateBMRButton">Calculate BMR</button>
     </form>
 
+    <!-- Container til at vise resultater af BMR beregning -->
     <div class="intake-records" id="result">
       <h3>Your BMR</h3>
     </div>
@@ -51,9 +60,9 @@
   <script>
     const loggedInUserId = localStorage.getItem("loggedInUserId");
     let gender = "";
-    let hasBMRRecord = false; // Flag to track if user has existing BMR record
+    let hasBMRRecord = false; // Flag til at spore om brugeren allerede har en BMR optegnelse
     let OldBmrID = "";
-    // Function to fetch user details and populate form fields
+    // Funktion til at hente brugeroplysninger og udfylde formularfelter
     function fetchUserDetails() {
       fetch(`http://localhost:3000/api/users/${loggedInUserId}`)
         .then((response) => {
@@ -74,7 +83,7 @@
         });
     }
 
-    // Function to check for existing BMR record on page load
+    // Funktion til at tjekke for eksisterende BMR optegnelse ved siden indlæsning
     function checkBMRRecord() {
       fetch(`http://localhost:3000/api/bmr/${loggedInUserId}`)
         .then((response) => {
@@ -102,11 +111,11 @@
         });
     }
 
-    // Function to calculate BMR based on age, weight, and gender
+    // Funktion til at beregne BMR baseret på alder, vægt og køn
     function calculateBMR(age, weight) {
       let bmr = 0;
 
-      // Determine BMR based on age, weight, and gender
+      // Bestem BMR baseret på alder, vægt og køn
       if (gender === "f") {
         console.log(gender);
         if (age < 3) {
@@ -128,15 +137,15 @@
         console.log(gender);
         if (age < 3) {
           bmr = 0.249 * weight - 0.13;
-        } else if (age >= 4 && age <= 10) {
+        } else if (age >= 4 and age <= 10) {
           bmr = 0.095 * weight + 2.11;
-        } else if (age >= 11 && age <= 18) {
+        } else if (age >= 11 and age <= 18) {
           bmr = 0.074 * weight + 2.75;
-        } else if (age >= 19 && age <= 30) {
+        } else if (age >= 19 and age <= 30) {
           bmr = 0.064 * weight + 2.84;
-        } else if (age >= 31 && age <= 60) {
+        } else if (age >= 31 and age <= 60) {
           bmr = 0.0485 * weight + 3.67;
-        } else if (age >= 61 && age <= 75) {
+        } else if (age >= 61 and age <= 75) {
           bmr = 0.0499 * weight + 2.93;
         } else if (age > 75) {
           bmr = 0.035 * weight + 3.43;
@@ -146,16 +155,16 @@
       return bmr;
     }
 
-    // Function to display BMR records on the page
+    // Funktion til at vise BMR optegnelser på siden
     function displayBMRRecords(record) {
       const activityRecordsDiv = document.getElementById("result");
-      // Clear previous records
+      // Ryd tidligere optegnelser
       activityRecordsDiv.innerHTML = "";
-      // Create and append the <h3> element for BMR
+      // Opret og tilføj <h3> element for BMR
       const bmrHeading = document.createElement("h3");
       bmrHeading.textContent = "Your BMR";
       activityRecordsDiv.appendChild(bmrHeading);
-      const formattedDateTime = new Date(record.Datetime).toLocaleString(); // Format date and time
+      const formattedDateTime = new Date(record.Datetime).toLocaleString(); // Formatér dato og tid
       const recordElement = document.createElement("div");
       recordElement.classList.add("record");
       recordElement.innerHTML = `
@@ -164,7 +173,7 @@
       activityRecordsDiv.appendChild(recordElement);
     }
 
-    // Function to calculate BMR on the frontend
+    // Funktion til at beregne BMR på klient-siden
     function calculateBMRFrontend() {
       const age = parseInt(document.getElementById("age").value);
       const weight = parseFloat(document.getElementById("weight").value);
@@ -181,10 +190,10 @@
       };
       const Datetime = tempDate.toLocaleString("en-US", options);
       // temp = [{ BMR:  }];
-      // Clear previous records
+      // Ryd tidligere optegnelser
       const activityRecordsDiv = document.getElementById("result");
       activityRecordsDiv.innerHTML = "";
-      // Create and append the <h3> element for BMR
+      // Opret og tilføj <h3> element for BMR
       const bmrHeading = document.createElement("h3");
       bmrHeading.textContent = "Your BMR";
       activityRecordsDiv.appendChild(bmrHeading);
@@ -199,26 +208,26 @@
       const currentDate = new Date();
       const formattedDateTime = currentDate.toLocaleString();
 
-      // Calculation logic...
+      // Beregningslogik...
 
       const requestBody = {
         userID: loggedInUserId,
         age: age,
         weight: weight,
-        datetime: currentDate, // Include date and time in the request body
+        datetime: currentDate, // Inkludér dato og tid i forespørgselslegemet
         bmrvalue: bmrValue.toFixed(2)
       };
 
       if (!hasBMRRecord) {
-        // If no record exists, create a new one
+        // Hvis ingen optegnelse findes, opret en ny
         createBMRRecord(requestBody);
       } else {
-        // If record exists, update it
+        // Hvis optegnelse findes, opdater den
         updateBMRRecord(requestBody);
       }
     }
 
-    // Function to create a new BMR record
+    // Funktion til at oprette en ny BMR optegnelse
     function createBMRRecord(requestBody) {
       fetch("http://localhost:3000/api/bmr", {
         method: "POST",
@@ -239,7 +248,7 @@
         .then((data) => {
           // fetchBMRRecords(loggedInUserId);
           alert("record created.");
-          hasBMRRecord = true; // Update flag
+          hasBMRRecord = true; // Opdater flag
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -247,7 +256,7 @@
         });
     }
 
-    // Function to update an existing BMR record
+    // Funktion til at opdatere en eksisterende BMR optegnelse
     function updateBMRRecord(requestBody) {
       fetch(`http://localhost:3000/api/bmr/${OldBmrID}`, {
         method: "PUT",
@@ -269,29 +278,29 @@
         });
     }
 
-    // Event listener for calculating BMR
+    // Event listener for beregning af BMR
     document
       .getElementById("calculateBMRButton")
       .addEventListener("click", calculateBMRFrontend);
 
-    // Logout functionality
+    // Logout funktionalitet
     document.getElementById("logout").addEventListener("click", function () {
       localStorage.setItem("loggedIn", "false");
       window.location.href = "./login.html";
     });
 
-    // Redirect to login page if not logged in
+    // Omdiriger til login side hvis ikke logget ind
     const isLoggedIn = localStorage.getItem("loggedIn");
     if (isLoggedIn !== "true") {
       window.location.href = "./login.html";
     }
 
-    // Redirect to profile update page
+    // Omdiriger til profil opdateringsside
     document.getElementById("update").addEventListener("click", function () {
       window.location.href = "./updateProfile.html";
     });
 
-    // Fetch user details and BMR records when the page loads
+    // Hent brugeroplysninger og BMR optegnelser når siden indlæses
     window.onload = function () {
       fetchUserDetails();
       checkBMRRecord();
