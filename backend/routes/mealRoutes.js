@@ -1,18 +1,19 @@
 const express = require('express');
-const router = express.Router();
-const sql = require('mssql');
+const router = express.Router(); // Opretter en router til håndtering af ruteanmodninger
+const sql = require('mssql'); // Importerer MSSQL-modul til databaseinteraktion
 
-// Endpoint to create a new meal and meal ingredients
+// Slutpunkt til oprettelse af et nyt måltid og måltidsingredienser
 router.post('/api/meals', (req, res) => {
-    const { userID, name, ingredients } = req.body;
-    // Insert meal into Meal table
+    const { userID, name, ingredients } = req.body; // Udpakker data fra anmodningen
+
+    // Indsæt måltid i Meal-tabel
     const mealQuery = `
         INSERT INTO [dbo].[Meal] (UserID, Mealname)
         OUTPUT inserted.MealID
         VALUES (${userID}, '${name}');
     `;
 
-    // Insert meal ingredients into MealIngredients table
+    // Indsæt måltidsingredienser i MealIngredients-tabel
     const insertIngredientsQuery = (mealID) => {
         const ingredientQueries = ingredients.map(ingredient => {
             return `
@@ -36,13 +37,12 @@ router.post('/api/meals', (req, res) => {
         });
 });
 
-
-// Endpoint to get meal and meal ingredients by meal ID
+// Slutpunkt til at hente måltid og måltidsingredienser efter måltids-ID
 router.get('/api/meals/:userID/:mealID', (req, res) => {
     const mealID = req.params.mealID;
     const userId = req.params.userID;
 
-    // Query to retrieve meal and meal ingredients
+    // Forespørgsel for at hente måltid og måltidsingredienser
     const query = `
         SELECT Meal.*, MealIngredients.*
         FROM [dbo].[Meal]
@@ -50,11 +50,11 @@ router.get('/api/meals/:userID/:mealID', (req, res) => {
         WHERE Meal.MealID = ${mealID} and Meal.UserID = ${userId};
     `;
 
-    // Connect to the database and execute query
+    // Forbind til databasen og udfør forespørgslen
     sql.query(query)
         .then(result => {
             if (result.recordset.length > 0) {
-                // Group meal ingredients by meal ID
+                // Grupper måltidsingredienser efter måltids-ID
                 const mealData = {
                     mealID: result.recordset[0].MealID,
                     userID: result.recordset[0].UserID,
@@ -76,12 +76,11 @@ router.get('/api/meals/:userID/:mealID', (req, res) => {
         });
 });
 
-
-// Endpoint to get all meals and meal ingredients by user ID
+// Slutpunkt til at hente alle måltider og måltidsingredienser efter bruger-ID
 router.get('/api/meals/:userID', (req, res) => {
     const userId = req.params.userID;
-    console.log(userId)
-    // Query to retrieve all meals and their ingredients for the given user ID
+
+    // Forespørgsel for at hente alle måltider og deres ingredienser for den angivne bruger-ID
     const query = `
         SELECT Meal.*, MealIngredients.*
         FROM [dbo].[Meal]
@@ -89,11 +88,11 @@ router.get('/api/meals/:userID', (req, res) => {
         WHERE Meal.UserID = ${userId};
     `;
 
-    // Connect to the database and execute query
+    // Forbind til databasen og udfør forespørgslen
     sql.query(query)
         .then(result => {
             if (result.recordset.length > 0) {
-                // Group meals and their ingredients by meal ID
+                // Gruppér måltider og deres ingredienser efter måltids-ID
                 const meals = {};
                 result.recordset.forEach(row => {
                     if (!meals[row.MealID]) {
@@ -111,7 +110,7 @@ router.get('/api/meals/:userID', (req, res) => {
                         amount: row.IngredientsAmount
                     });
                 });
-                res.json(Object.values(meals)); // Send an array of meal objects
+                res.json(Object.values(meals)); // Send et array af måltidsobjekter
             } else {
                 res.status(404).json({ message: 'No meals found for the user ID' });
             }
@@ -121,38 +120,36 @@ router.get('/api/meals/:userID', (req, res) => {
         });
 });
 
-// Import the required modules and set up your server
-
-// Define the DELETE endpoint to remove a meal and its ingredients
+// Definér slutpunktet til at slette et måltid og dets ingredienser
 router.delete('/api/meals/:mealID', (req, res) => {
     const mealID = req.params.mealID;
-    console.log({ mealID })
-    // Query to delete the meal from the Meal table
+
+    // Forespørgsel for at slette måltidet fra Meal-tabellen
     const deleteMealQuery = `
         DELETE FROM [dbo].[Meal]
         WHERE MealID = ${mealID};
     `;
 
-    // Query to delete the associated ingredients from the MealIngredients table
+    // Forespørgsel for at slette de tilknyttede ingredienser fra MealIngredients-tabellen
     const deleteIngredientsQuery = `
         DELETE FROM [dbo].[MealIngredients]
         WHERE MealID = ${mealID};
     `;
 
-    // Execute the delete queries
+    // Udfør sletningsforespørgslerne
     sql.query(deleteIngredientsQuery)
         .then(() => {
-            // After deleting the meal, delete its associated ingredients
+            // Efter sletning af måltidet, slet dets tilknyttede ingredienser
             return sql.query(deleteMealQuery);
         })
         .then(() => {
-            // Send a success response
+            // Send en succesbesked
             res.json({ message: 'Meal and its ingredients deleted successfully' });
         })
         .catch(err => {
-            // If an error occurs, send an error response
+            // Hvis der opstår en fejl, send en fejlbesked
             res.status(500).json({ error: err.message });
         });
 });
 
-module.exports = router
+module.exports = router; // Eksporterer routerobjektet til brug i andre filer
