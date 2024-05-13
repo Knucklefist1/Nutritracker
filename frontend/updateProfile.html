@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Profile</title>
+<!DOCTYPE html> <!-- Definerer dokumenttypen og versionen af HTML -->
+<html lang="en"> <!-- Starter HTML-dokumentet og specificerer sproget (engelsk) -->
+  <head> <!-- Indeholder metadata og links til eksterne ressourcer -->
+    <meta charset="UTF-8" /> <!-- Specificerer tegnsættet til UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Sørger for responsive design ved at tilpasse visningen til enhedens bredde -->
+    <title>Edit Profile</title> <!-- Sætter titlen i browserens titellinje -->
 
-    <link rel="stylesheet" href="styles.css" />
-    <style>
-      body {
+    <link rel="stylesheet" href="styles.css" /> <!-- Linker til en ekstern CSS-fil for at style dokumentet -->
+    <style> <!-- Definerer interne CSS-stylingregler for elementerne på siden -->
+      body { /* Grundlæggende styling for hele siden */
         margin: 0;
         padding: 0;
         font-family: Arial, sans-serif;
@@ -15,14 +15,14 @@
         box-sizing: border-box;
       }
 
-      .container {
+      .container { /* Styling for en container der centrerer indholdet vertikalt og horisontalt */
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
       }
 
-      .card {
+      .card { /* Styling for et kort der viser brugerprofilformularen */
         width: 350px;
         padding: 20px;
         border-radius: 10px;
@@ -30,152 +30,96 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
 
-      .form-group {
+      .form-group { /* Styling for formgrupper, giver afstand mellem formelementerne */
         margin-bottom: 20px;
       }
 
-      .form-group label {
+      .form-group label, .form-group input, .form-group select, .form-group button, .delete-button { /* Styling for labels, inputs, selects, knapper og sletteknappen */
         display: block;
+        width: 100%;
         margin-bottom: 5px;
-      }
-
-      .form-group input {
-        width: 100%;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding-left: 5px;
-      }
-
-      .form-group select {
-        width: 100%;
         padding: 10px;
-        border: 1px solid #ccc;
         border-radius: 5px;
       }
 
-      .form-group button {
-        width: 100%;
-        padding: 10px;
+      .form-group input, .form-group select { /* Yderligere styling for input og select elementer */
+        border: 1px solid #ccc;
+      }
+
+      .form-group button, .delete-button { /* Styling for knapper, inklusiv farve og interaktivitet */
         background-color: #91c789;
         color: #fff;
         border: none;
-        border-radius: 5px;
         cursor: pointer;
       }
-      .delete-button {
-        width: 100%;
-        padding: 10px;
+
+      .delete-button { /* Specifik styling for sletteknappen */
         background-color: #e74c3c !important;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
       }
     </style>
   </head>
-  <body>
-    <div class="navbar">
-      <div class="navbar-logo-container">
-        <img
-          src="images/logo.png"
-          alt="NutriTracker Logo"
-          class="navbar-logo"
-        />
+  <body> <!-- Indeholder det synlige indhold på websiden -->
+    <div class="navbar"> <!-- Navigation bar for links og logo -->
+      <div class="navbar-logo-container"> <!-- Container for logoet -->
+        <img src="images/logo.png" alt="NutriTracker Logo" class="navbar-logo" /> <!-- Logo billede -->
       </div>
-      <div class="navbar-links">
-        <a href="meal_creator.html">Meal Creator</a>
-        <div class="dropdown">
-          <button class="dropbtn">Tracker</button>
-          <div class="dropdown-content">
-            <a href="meal_tracker.html">Meal Tracker</a>
-            <a href="IngredientTracker.html">Ingredient Tracker</a>
-            <a href="activityTracker.html">Activity Tracker</a>
+      <div class="navbar-links"> <!-- Container for navigation links -->
+        <a href="meal_creator.html">Meal Creator</a> <!-- Link til meal creator side -->
+        <div class="dropdown"> <!-- Dropdown menu for tracker links -->
+          <button class="dropbtn">Tracker</button> <!-- Dropdown knap -->
+          <div class="dropdown-content"> <!-- Indhold i dropdown menuen -->
+            <a href="meal_tracker.html">Meal Tracker</a> <!-- Link til meal tracker side -->
+            <a href="IngredientTracker.html">Ingredient Tracker</a> <!-- Link til ingredient tracker side -->
+            <a href="activityTracker.html">Activity Tracker</a> <!-- Link til activity tracker side -->
           </div>
         </div>
-        <a href="DailyNutri.html">Daily Nutri</a>
-        <a href="BMR.html">BMR</a>
-        <a href="#" id="logout">Logout</a>
-        <a href="#" id="update" class="active">Edit Profile</a>
+        <a href="DailyNutri.html">Daily Nutri</a> <!-- Link til daily nutrition side -->
+        <a href="BMR.html">BMR</a> <!-- Link til BMR beregner side -->
+        <a href="#" id="logout">Logout</a> <!-- Logout link -->
+        <a href="#" id="update" class="active">Edit Profile</a> <!-- Link til redigering af profil -->
       </div>
     </div>
 
-    <div class="container">
-      <div class="card">
-        <h2>Edit Profile</h2>
-        <form id="edit-profile-form" style="padding-top: 25px">
-          <div class="form-group">
-            <label for="fullname">Full Name</label>
-            <input
-              type="text"
-              id="fullname"
-              name="fullname"
-              required
-              autocomplete="off"
-            />
+    <div class="container"> <!-- Centreret container til profilform -->
+      <div class="card"> <!-- Kort der indeholder formen -->
+        <h2>Edit Profile</h2> <!-- Overskrift for formen -->
+        <form id="edit-profile-form" style="padding-top: 25px"> <!-- Form for redigering af profil -->
+          <div class="form-group"> <!-- Formgruppe for fuldt navn -->
+            <label for="fullname">Full Name</label> <!-- Label for fuldt navn input -->
+            <input type="text" id="fullname" name="fullname" required autocomplete="off" /> <!-- Input for fuldt navn -->
           </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              autocomplete="off"
-            />
+          <div class="form-group"> <!-- Formgruppe for email -->
+            <label for="email">Email</label> <!-- Label for email input -->
+            <input type="email" id="email" name="email" required autocomplete="off" /> <!-- Input for email -->
           </div>
-          <div class="form-group">
-            <label for="age">Age</label>
-            <input
-              type="number"
-              id="age"
-              name="age"
-              required
-              autocomplete="off"
-            />
+          <div class="form-group"> <!-- Formgruppe for alder -->
+            <label for="age">Age</label> <!-- Label for alder input -->
+            <input type="number" id="age" name="age" required autocomplete="off" /> <!-- Input for alder -->
           </div>
-          <div class="form-group">
-            <label for="weight">Weight</label>
-            <input
-              type="number"
-              id="weight"
-              name="weight"
-              required
-              autocomplete="off"
-            />
+          <div class="form-group"> <!-- Formgruppe for vægt -->
+            <label for="weight">Weight</label> <!-- Label for vægt input -->
+            <input type="number" id="weight" name="weight" required autocomplete="off" /> <!-- Input for vægt -->
           </div>
-          <div class="form-group">
-            <label for="gender">Gender</label>
-            <select id="gender" name="gender" required autocomplete="off">
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+          <div class="form-group"> <!-- Formgruppe for køn -->
+            <label for="gender">Gender</label> <!-- Label for køn vælger -->
+            <select id="gender" name="gender" required autocomplete="off"> <!-- Vælger for køn -->
+              <option value="male">Male</option> <!-- Option for mand -->
+              <option value="female">Female</option> <!-- Option for kvinde -->
             </select>
           </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              required
-              autocomplete="off"
-            />
+          <div class="form-group"> <!-- Formgruppe for password -->
+            <label for="password">Password</label> <!-- Label for password input -->
+            <input type="password" id="password" name="password" required autocomplete="off" /> <!-- Input for password -->
           </div>
-          <div class="form-group">
-            <button type="submit">Save Changes</button>
-          </div>
-
-          <div class="form-group">
-            <button type="button" class="delete-button" id="delete-profile">
-              Delete Profile
-            </button>
+          <div class="form-group"> <!-- Knapper for at gemme ændringer eller slette profil -->
+            <button type="submit">Save Changes</button> <!-- Gem ændringer knap -->
+            <button type="button" class="delete-button" id="delete-profile">Delete Profile</button> <!-- Slet profil knap -->
           </div>
         </form>
       </div>
     </div>
 
-    <script>
+    <script> <!-- Script til at håndtere logout funktionalitet -->
       document.getElementById("logout").addEventListener("click", function () {
         localStorage.setItem("loggedIn", "false");
         localStorage.setItem("loggedInUserId", "");
@@ -183,16 +127,18 @@
       });
     </script>
 
-    <script>
+    <script> <!-- Script til at håndtere brugerdata og opdateringslogik -->
+      // Kontrollerer om brugeren er logget ind
       const isLoggedIn = localStorage.getItem("loggedIn");
       if (isLoggedIn !== "true") {
-        window.location.href = "./login.html"; // Redirect to login page
+        window.location.href = "./login.html"; // Omdirigerer til login siden hvis ikke logget ind
       }
-      // Function to fetch user details
+
+      // Funktion til at hente brugeroplysninger
       function getUserDetails() {
         const loggedInUserId = localStorage.getItem("loggedInUserId");
 
-        // Fetch user details using the backend endpoint
+        // Henter brugeroplysninger fra serveren
         fetch(`http://localhost:3000/api/users/${loggedInUserId}`)
           .then((response) => {
             if (response.ok) {
@@ -202,17 +148,17 @@
             }
           })
           .then((userData) => {
-            // Populate the form fields with user details
+            // Udfylder formularfelterne med brugerdata
             document.getElementById("fullname").value = userData.Username || "";
             document.getElementById("email").value = userData.Email || "";
             document.getElementById("age").value = userData.Age || "";
-            // Set gender field based on user's sex
+            // Sætter kønsfeltet baseret på brugerens køn
             if (userData.Sex === "m") {
               document.getElementById("gender").value = "male";
             } else if (userData.Sex === "f") {
               document.getElementById("gender").value = "female";
             } else {
-              // If sex data is neither "m" nor "f", leave gender field empty
+              // Hvis kønsdata hverken er "m" eller "f", efterlades kønsfeltet tomt
               document.getElementById("gender").value = "";
             }
             document.getElementById("password").value = userData.Password || "";
@@ -224,12 +170,12 @@
           });
       }
 
-      // Function to update user profile
+      // Funktion til at opdatere brugerprofil
       function updateProfile() {
         const loggedInUserId = localStorage.getItem("loggedInUserId");
         const editProfileForm = document.getElementById("edit-profile-form");
 
-        // Create user object with form data
+        // Skaber et brugerobjekt med formdata
         const updatedUser = {
           username: editProfileForm.querySelector("#fullname").value.trim(),
           password: editProfileForm.querySelector("#password").value.trim(),
@@ -239,7 +185,7 @@
           weight: editProfileForm.querySelector("#weight").value.trim(),
         };
 
-        // Send updated user information to the backend endpoint
+        // Sender opdateret brugerinformation til serveren
         fetch(`http://localhost:3000/api/users/${loggedInUserId}`, {
           method: "PUT",
           headers: {
@@ -249,7 +195,7 @@
         })
           .then((response) => {
             if (response.ok) {
-              // Redirect or perform any other necessary action
+              // Omdirigerer eller udfører anden nødvendig handling
               alert("Profile Updated");
               window.location.href = "index.html";
             } else {
@@ -262,20 +208,20 @@
           });
       }
 
-      // Function to delete user profile
+      // Funktion til at slette brugerprofil
       function deleteProfile() {
         const loggedInUserId = localStorage.getItem("loggedInUserId");
 
-        // Send DELETE request to delete user profile
+        // Sender DELETE anmodning for at slette brugerprofil
         fetch(`http://localhost:3000/api/users/${loggedInUserId}`, {
           method: "DELETE",
         })
           .then((response) => {
             if (response.ok) {
-              // Set loggedIn to false and loggedInUserId to empty string
+              // Sætter loggedIn til falsk og loggedInUserId til tom streng
               localStorage.setItem("loggedIn", "false");
               localStorage.setItem("loggedInUserId", "");
-              // Redirect to login page
+              // Omdirigerer til login side
               window.location.href = "./login.html";
             } else {
               throw new Error("Failed to delete profile");
@@ -287,10 +233,10 @@
           });
       }
 
-      // Fetch user details when the page loads
+      // Henter brugeroplysninger når siden indlæses
       document.addEventListener("DOMContentLoaded", getUserDetails);
 
-      // Add event listener to the edit profile form
+      // Tilføjer event listener til redigeringsprofilformularen
       document
         .getElementById("edit-profile-form")
         .addEventListener("submit", function (event) {
@@ -298,7 +244,7 @@
           updateProfile();
         });
 
-      // Add event listener to the delete profile button
+      // Tilføjer event listener til slet profil knappen
       document
         .getElementById("delete-profile")
         .addEventListener("click", deleteProfile);
