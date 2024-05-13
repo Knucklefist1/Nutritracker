@@ -1,7 +1,8 @@
 const express = require('express');
-const router = express.Router();
-const sql = require('mssql');
+const router = express.Router(); // Opretter en router til håndtering af ruteanmodninger
+const sql = require('mssql'); // Importerer MSSQL-modul til databaseinteraktion
 
+// Opret en ny post-rute til måltidsingredienssporing
 router.post("/api/mealIngredientTracker", (req, res) => {
     const {
         userID,
@@ -14,9 +15,9 @@ router.post("/api/mealIngredientTracker", (req, res) => {
         drinkTime,
         date,
         time,
-    } = req.body;
+    } = req.body; // Udpakker data fra anmodningen
     const query = `INSERT INTO MealIngredientTracker (UserID, Weight, IngredientsID,Mealname, TimeOfMeal, Nutrients, DrinkVolume, DrinkTime, Date,Time)
-                     VALUES (@UserID, @Weight, @IngredientsID,@Mealname, @TimeOfMeal, @Nutrients, @DrinkVolume, @DrinkTime, @Date,@Time);`;
+                     VALUES (@UserID, @Weight, @IngredientsID,@Mealname, @TimeOfMeal, @Nutrients, @DrinkVolume, @DrinkTime, @Date,@Time);`; // SQL-forespørgsel til at indsætte data om måltidsingredienser i databasen
     const request = new sql.Request();
     request.input("UserID", sql.Int, userID);
     request.input("Weight", sql.Decimal(10, 2), weight);
@@ -31,31 +32,30 @@ router.post("/api/mealIngredientTracker", (req, res) => {
 
     request.query(query, (err, result) => {
         if (err) {
-            res.status(500).send(err.message);
+            res.status(500).send(err.message); // Sender fejlmeddelelse til klienten ved fejl
         } else {
-            res.status(200).json({ success: true });
+            res.status(200).json({ success: true }); // Sender en succesmeddelelse til klienten
         }
     });
 });
 
-// READ operation - Get all records for a specific user
+// Læs alle poster for en specifik bruger
 router.get('/api/mealIngredientTracker/:userID', (req, res) => {
-    const userID = req.params.userID;
-    const query = `SELECT * from MealIngredientTracker WHERE UserID = @UserID;`;
-    // const query = `SELECT Ingredients.Name, MealIngredientTracker.* from Ingredients JOIN MealIngredientTracker ON Ingredients.IngredientsID = MealIngredientTracker.IngredientsID WHERE UserID = @UserID;`;
+    const userID = req.params.userID; // Henter bruger-ID fra anmodningen
+    const query = `SELECT * from MealIngredientTracker WHERE UserID = @UserID;`; // SQL-forespørgsel til at hente alle måltidsingrediensposter for en bruger
     const request = new sql.Request();
     request.input('UserID', sql.Int, userID);
 
     request.query(query, (err, result) => {
         if (err) {
-            res.status(500).send(err.message);
+            res.status(500).send(err.message); // Sender fejlmeddelelse til klienten ved fejl
         } else {
-            res.status(200).json(result.recordset);
+            res.status(200).json(result.recordset); // Sender data om måltidsingredienser til klienten
         }
     });
 });
 
-// UPDATE operation - Update a MealIngredientTracker record
+// Opdater en post for måltidsingredienssporing
 router.put("/api/mealIngredientTracker/:id", (req, res) => {
     const {
         UserID,
@@ -68,16 +68,13 @@ router.put("/api/mealIngredientTracker/:id", (req, res) => {
         DrinkTime,
         Date,
         Time,
-    } = req.body;
-    const { id } = req.params;
+    } = req.body; // Udpakker data fra anmodningen
+    const { id } = req.params; // Henter post-ID fra anmodningen
     const query = `UPDATE MealIngredientTracker SET Weight = @Weight, TimeOfMeal = @TimeOfMeal, Nutrients = @Nutrients, DrinkVolume = @DrinkVolume, DrinkTime = @DrinkTime, Date = @Date, Time = @Time
-                     WHERE MealIngredientTrackerID = @MealIngredientTrackerID;`;
+                     WHERE MealIngredientTrackerID = @MealIngredientTrackerID;`; // SQL-forespørgsel til at opdatere en post for måltidsingredienssporing
     const request = new sql.Request();
     request.input("MealIngredientTrackerID", sql.Int, id);
-    // request.input('UserID', sql.Int, userID);
     request.input("Weight", sql.Decimal(10, 2), Weight);
-    // request.input('IngredientsID', sql.VarChar(255), String(ingredientsID));
-    // request.input('Mealname', sql.VarChar(255), mealName);
     request.input("TimeOfMeal", sql.VarChar(8), TimeOfMeal);
     request.input("Nutrients", sql.NVarChar(sql.MAX), JSON.stringify(Nutrients));
     request.input("DrinkVolume", sql.Decimal(10, 2), DrinkVolume);
@@ -87,25 +84,23 @@ router.put("/api/mealIngredientTracker/:id", (req, res) => {
 
     request.query(query, (err, result) => {
         if (err) {
-            res.status(500).send(err.message);
+            res.status(500).send(err.message); // Sender fejlmeddelelse til klienten ved fejl
         } else {
-            res
-                .status(200)
-                .json({ message: "MealIngredientTracker record updated successfully" });
+            res.status(200).json({ message: "MealIngredientTracker record updated successfully" }); // Sender en succesmeddelelse til klienten
         }
     });
 });
 
-// DELETE: Delete a record
+// Slet en post
 router.delete('/api/mealIngredientTracker/:id', async (req, res) => {
     try {
         new sql.Request()
             .input('MealIngredientTrackerID', sql.Int, req.params.id)
             .query('DELETE FROM MealIngredientTracker WHERE MealIngredientTrackerID = @MealIngredientTrackerID');
-        res.send('Delete successful');
+        res.send('Delete successful'); // Sender en besked om, at sletning var vellykket
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).send(error.message); // Sender fejlmeddelelse til klienten ved fejl
     }
 });
 
-module.exports = router
+module.exports = router; // Eksporterer routerobjektet til brug i andre filer
