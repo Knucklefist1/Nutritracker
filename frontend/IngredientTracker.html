@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Definerer tegnsættet til UTF-8, som understøtter alle moderne tegn og symboler -->
     <meta charset="UTF-8" />
+    <!-- Sætter viewport for at sikre responsivt design på mobile enheder -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Titel på websiden -->
     <title>Meal Tracker</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Importerer Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Link til ekstern CSS fil for styling -->
     <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
+    <!-- Navigationbar øverst på siden -->
     <div class="navbar">
+      <!-- Logo container -->
       <div class="navbar-logo-container">
-        <img
-          src="images/logo.png"
-          alt="NutriTracker Logo"
-          class="navbar-logo"
-        />
+        <!-- Logo billede -->
+        <img src="images/logo.png" alt="NutriTracker Logo" class="navbar-logo" />
       </div>
+      <!-- Navigation links -->
       <div class="navbar-links">
         <a href="meal_creator.html">Meal Creator</a>
+        <!-- Dropdown menu for tracking -->
         <div class="dropdown">
           <button class="dropbtn active">Tracker</button>
           <div class="dropdown-content">
             <a href="meal_tracker.html">Meal Tracker</a>
-            <a href="IngredientTracker.html" class="active"
-              >Ingredient Tracker</a
-            >
+            <a href="IngredientTracker.html" class="active">Ingredient Tracker</a>
             <a href="activityTracker.html">Activity Tracker</a>
           </div>
         </div>
@@ -39,8 +40,10 @@
       </div>
     </div>
 
+    <!-- Container til sporing af ingredienser -->
     <div class="tracker-container">
       <h2>Ingredient Tracker</h2>
+      <!-- Formular til indtastning af måltidsdata -->
       <form id="trackMealForm">
         <label for="ingredientSelect">Select Ingredient:</label>
         <select id="ingredientSelect" name="recipe" required></select>
@@ -52,58 +55,49 @@
         <input type="time" id="mealTime" name="mealTime" required />
 
         <label for="mealDate">Date of Meal:</label>
-        <input
-          type="date"
-          class="mealDate"
-          id="mealDate"
-          name="mealDate"
-          required
-        />
+        <input type="date" class="mealDate" id="mealDate" name="mealDate" required />
 
         <label for="drinkVolume">Volume of Drink (liters):</label>
-        <input
-          type="number"
-          id="drinkVolume"
-          name="drinkVolume"
-          step="0.1"
-          required
-        />
+        <input type="number" id="drinkVolume" name="drinkVolume" step="0.1" required />
 
         <label for="drinkTime">Time of Drink:</label>
         <input type="time" id="drinkTime" name="drinkTime" required />
 
+        <!-- Knap til at registrere indtaget -->
         <button type="button" id="registerIngredientTrackerIntakeButton">
           Register Intake
         </button>
       </form>
 
+      <!-- Container til at vise optegnelser af indtag -->
       <div class="intake-records">
         <h3>Your Intake Records</h3>
       </div>
     </div>
 
+    <!-- Element til at vise geolokationsdata -->
     <div id="demo"></div>
-    <!-- This is the element where the location data will be displayed -->
 
+    <!-- Script til håndtering af bruger session og navigation -->
     <script src="IngredientTracker.js"></script>
-
     <script>
       document.getElementById("logout").addEventListener("click", function () {
         localStorage.setItem("loggedIn", "false");
-        window.location.href = "./login.html";
+        window.location.href = "./login.html"; // Omdirigerer til logind-siden ved logud
       });
 
       document.getElementById("update").addEventListener("click", function () {
-        window.location.href = "./updateProfile.html";
+        window.location.href = "./updateProfile.html"; // Omdirigerer til profilopdatering ved klik
       });
 
       const isLoggedIn = localStorage.getItem("loggedIn");
       if (isLoggedIn !== "true") {
-        window.location.href = "./login.html"; // Redirect to login page
+        window.location.href = "./login.html"; // Sikrer at brugeren er logget ind
       }
     </script>
+    <!-- Script til at håndtere geolokation -->
     <script>
-      // Call getLocation() when the page is loaded
+      // Funktion til at hente og vise brugerens geografiske position
       document.addEventListener("DOMContentLoaded", getLocation);
 
       function getLocation() {
@@ -112,7 +106,7 @@
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(showPosition);
         } else {
-          x.innerHTML = "Geolocation is not supported by this browser.";
+          x.innerHTML = "Geolocation is not supported by this browser."; // Fejlmeddelelse, hvis geolokation ikke understøttes
         }
       }
 
@@ -122,7 +116,7 @@
           "Latitude: " +
           position.coords.latitude +
           "<br>Longitude: " +
-          position.coords.longitude;
+          position.coords.longitude; // Viser bredde- og længdegrad
       }
     </script>
   </body>
